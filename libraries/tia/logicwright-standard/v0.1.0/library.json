@@ -1,0 +1,22 @@
+{
+  "libraryName": "Logicwright.Standard.TIA",
+  "version": "0.1.0",
+  "target": {
+    "tiaPortal": "V21",
+    "plcFamilies": [
+      "S7-1200",
+      "S7-1500"
+    ]
+  },
+  "modules": [
+    {
+      "templateId": "CM_Cylinder_V0_1",
+      "typeName": "CM_Cylinder",
+      "version": "0.1.0",
+      "sources": [
+        "plc/CM_Cylinder/CM_Cylinder_Types.scl",
+        "plc/CM_Cylinder/CM_Cylinder.scl"
+      ]
+    }
+  ]
+}

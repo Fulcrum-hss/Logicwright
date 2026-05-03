@@ -14,10 +14,17 @@ Core documents:
 - `docs/02-tia-plc-development-baseline.md`
 - `docs/03-plc-library-hmi-asset-strategy.md`
 - `docs/04-logicwright-input-package-template.md`
+- `docs/05-engineer-workflow-guide.md`
+- `docs/06-cm-cylinder-implementation.md`
 
 Standard input package template:
 
 - `templates/input-package/`
+
+First executable module path:
+
+- Standard library: `libraries/tia/logicwright-standard/v0.1.0/`
+- Generator: `generators/Logicwright.CylinderGenerator/`
 
 ## v0.1 Target
 

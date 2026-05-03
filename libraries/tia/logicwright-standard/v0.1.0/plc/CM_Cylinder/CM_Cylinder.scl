@@ -1,0 +1,232 @@
+FUNCTION_BLOCK "CM_Cylinder"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT
+      xEnable : Bool;
+      xReset : Bool;
+      xAutoMode : Bool;
+      xManualMode : Bool;
+      xFbExtended : Bool;
+      xFbRetracted : Bool;
+      xPermitExtend : Bool;
+      xPermitRetract : Bool;
+   END_VAR
+
+   VAR_IN_OUT
+      ioCmd : "typeCylinderCmd";
+      ioPar : "typeCylinderPar";
+      ioSts : "typeCylinderSts";
+      ioAlm : "typeCylinderAlm";
+   END_VAR
+
+   VAR_OUTPUT
+      xValveExtend : Bool;
+      xValveRetract : Bool;
+      xReady : Bool;
+      xBusy : Bool;
+      xDone : Bool;
+      xError : Bool;
+      iState : Int;
+      iErrorId : Int;
+   END_VAR
+
+   VAR
+      statState : Int := 0;
+      tonExtend : TON_TIME;
+      tonRetract : TON_TIME;
+   END_VAR
+
+   VAR_TEMP
+      tempReset : Bool;
+      tempManualAllowed : Bool;
+      tempCmdExtend : Bool;
+      tempCmdRetract : Bool;
+      tempFeedbackConflict : Bool;
+      tempNoFeedback : Bool;
+      tempFault : Bool;
+   END_VAR
+
+   VAR CONSTANT
+      C_STATE_DISABLED : Int := 0;
+      C_STATE_IDLE : Int := 10;
+      C_STATE_EXTENDING : Int := 20;
+      C_STATE_EXTENDED : Int := 30;
+      C_STATE_RETRACTING : Int := 40;
+      C_STATE_RETRACTED : Int := 50;
+      C_STATE_FAULTED : Int := 90;
+
+      C_ERR_NONE : Int := 0;
+      C_ERR_EXTEND_TIMEOUT : Int := 1001;
+      C_ERR_RETRACT_TIMEOUT : Int := 1002;
+      C_ERR_FEEDBACK_CONFLICT : Int := 1003;
+      C_ERR_NO_FEEDBACK : Int := 1004;
+      C_ERR_INTERLOCK_LOST : Int := 1005;
+      C_ERR_COMMAND_CONFLICT : Int := 1006;
+   END_VAR
+
+BEGIN
+   REGION Command arbitration
+      tempReset := xReset OR ioCmd.xReset OR ioCmd.xHmiReset;
+      tempManualAllowed := xManualMode AND ioCmd.xManualEnable AND ioPar.xHmiManualAllowed;
+
+      tempCmdExtend := ioCmd.xExtend OR (ioCmd.xHmiExtend AND tempManualAllowed);
+      tempCmdRetract := ioCmd.xRetract OR (ioCmd.xHmiRetract AND tempManualAllowed);
+
+      ioCmd.xHmiExtend := FALSE;
+      ioCmd.xHmiRetract := FALSE;
+      ioCmd.xHmiReset := FALSE;
+   END_REGION
+
+   REGION Feedback and alarm detection
+      tempFeedbackConflict := xFbExtended AND xFbRetracted;
+      tempNoFeedback := NOT xFbExtended AND NOT xFbRetracted AND ((statState = C_STATE_EXTENDED) OR (statState = C_STATE_RETRACTED));
+
+      tonExtend(IN := statState = C_STATE_EXTENDING, PT := ioPar.tExtendTimeout);
+      tonRetract(IN := statState = C_STATE_RETRACTING, PT := ioPar.tRetractTimeout);
+
+      IF tempReset THEN
+         ioAlm.xExtendTimeout := FALSE;
+         ioAlm.xRetractTimeout := FALSE;
+         ioAlm.xFeedbackConflict := FALSE;
+         ioAlm.xNoFeedback := FALSE;
+         ioAlm.xInterlockLost := FALSE;
+         ioAlm.xCommandConflict := FALSE;
+         ioAlm.iFirstFaultId := C_ERR_NONE;
+      END_IF;
+
+      IF tonExtend.Q THEN
+         ioAlm.xExtendTimeout := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_EXTEND_TIMEOUT;
+         END_IF;
+      END_IF;
+
+      IF tonRetract.Q THEN
+         ioAlm.xRetractTimeout := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_RETRACT_TIMEOUT;
+         END_IF;
+      END_IF;
+
+      IF tempFeedbackConflict THEN
+         ioAlm.xFeedbackConflict := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_FEEDBACK_CONFLICT;
+         END_IF;
+      END_IF;
+
+      IF tempNoFeedback THEN
+         ioAlm.xNoFeedback := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_NO_FEEDBACK;
+         END_IF;
+      END_IF;
+
+      IF (statState = C_STATE_EXTENDING) AND NOT xPermitExtend THEN
+         ioAlm.xInterlockLost := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_INTERLOCK_LOST;
+         END_IF;
+      END_IF;
+
+      IF (statState = C_STATE_RETRACTING) AND NOT xPermitRetract THEN
+         ioAlm.xInterlockLost := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_INTERLOCK_LOST;
+         END_IF;
+      END_IF;
+
+      IF tempCmdExtend AND tempCmdRetract THEN
+         ioAlm.xCommandConflict := TRUE;
+         IF ioAlm.iFirstFaultId = C_ERR_NONE THEN
+            ioAlm.iFirstFaultId := C_ERR_COMMAND_CONFLICT;
+         END_IF;
+      END_IF;
+
+      tempFault := ioAlm.xExtendTimeout OR ioAlm.xRetractTimeout OR ioAlm.xFeedbackConflict OR ioAlm.xNoFeedback OR ioAlm.xInterlockLost OR ioAlm.xCommandConflict;
+   END_REGION
+
+   REGION State machine
+      IF NOT xEnable THEN
+         statState := C_STATE_DISABLED;
+      ELSIF tempFault THEN
+         statState := C_STATE_FAULTED;
+      ELSE
+         CASE statState OF
+            C_STATE_DISABLED:
+               IF xEnable THEN
+                  IF xFbExtended AND NOT xFbRetracted THEN
+                     statState := C_STATE_EXTENDED;
+                  ELSIF xFbRetracted AND NOT xFbExtended THEN
+                     statState := C_STATE_RETRACTED;
+                  ELSE
+                     statState := C_STATE_IDLE;
+                  END_IF;
+               END_IF;
+
+            C_STATE_IDLE:
+               IF tempCmdExtend AND xPermitExtend THEN
+                  statState := C_STATE_EXTENDING;
+               ELSIF tempCmdRetract AND xPermitRetract THEN
+                  statState := C_STATE_RETRACTING;
+               END_IF;
+
+            C_STATE_EXTENDING:
+               IF ioCmd.xStop THEN
+                  statState := C_STATE_IDLE;
+               ELSIF xFbExtended AND NOT xFbRetracted THEN
+                  statState := C_STATE_EXTENDED;
+               END_IF;
+
+            C_STATE_EXTENDED:
+               IF tempCmdRetract AND xPermitRetract THEN
+                  statState := C_STATE_RETRACTING;
+               END_IF;
+
+            C_STATE_RETRACTING:
+               IF ioCmd.xStop THEN
+                  statState := C_STATE_IDLE;
+               ELSIF xFbRetracted AND NOT xFbExtended THEN
+                  statState := C_STATE_RETRACTED;
+               END_IF;
+
+            C_STATE_RETRACTED:
+               IF tempCmdExtend AND xPermitExtend THEN
+                  statState := C_STATE_EXTENDING;
+               END_IF;
+
+            C_STATE_FAULTED:
+               IF tempReset AND NOT tempFault THEN
+                  statState := C_STATE_IDLE;
+               END_IF;
+
+            ELSE
+               statState := C_STATE_IDLE;
+         END_CASE;
+      END_IF;
+   END_REGION
+
+   REGION Outputs and status
+      xValveExtend := xEnable AND ((statState = C_STATE_EXTENDING) OR ((statState = C_STATE_EXTENDED) AND NOT ioPar.xDoubleSolenoid));
+      xValveRetract := xEnable AND ioPar.xDoubleSolenoid AND (statState = C_STATE_RETRACTING);
+
+      xReady := xEnable AND NOT tempFault AND ((statState = C_STATE_IDLE) OR (statState = C_STATE_EXTENDED) OR (statState = C_STATE_RETRACTED));
+      xBusy := (statState = C_STATE_EXTENDING) OR (statState = C_STATE_RETRACTING);
+      xDone := (statState = C_STATE_EXTENDED) OR (statState = C_STATE_RETRACTED);
+      xError := tempFault;
+      iState := statState;
+      iErrorId := ioAlm.iFirstFaultId;
+
+      ioSts.xReady := xReady;
+      ioSts.xBusy := xBusy;
+      ioSts.xDone := xDone;
+      ioSts.xExtended := xFbExtended;
+      ioSts.xRetracted := xFbRetracted;
+      ioSts.xError := xError;
+      ioSts.xWarning := FALSE;
+      ioSts.xHmiManualActive := tempManualAllowed;
+      ioSts.iState := statState;
+      ioSts.iErrorId := iErrorId;
+      ioSts.iWarningId := 0;
+   END_REGION
+END_FUNCTION_BLOCK

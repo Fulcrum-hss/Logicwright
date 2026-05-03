@@ -21,3 +21,5 @@ __pycache__/
 # .NET build outputs
 bin/
 obj/
+**/bin/
+**/obj/

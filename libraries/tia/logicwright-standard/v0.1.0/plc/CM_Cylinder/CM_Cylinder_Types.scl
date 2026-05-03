@@ -1,0 +1,64 @@
+TYPE "typeCylinderCmd"
+VERSION : 0.1
+   STRUCT
+      xExtend : Bool;
+      xRetract : Bool;
+      xStop : Bool;
+      xReset : Bool;
+      xHmiExtend : Bool;
+      xHmiRetract : Bool;
+      xHmiReset : Bool;
+      xManualEnable : Bool;
+   END_STRUCT;
+END_TYPE
+
+TYPE "typeCylinderPar"
+VERSION : 0.1
+   STRUCT
+      tExtendTimeout : Time := T#3000ms;
+      tRetractTimeout : Time := T#3000ms;
+      xDoubleSolenoid : Bool := TRUE;
+      xHomeExtended : Bool := FALSE;
+      xHmiManualAllowed : Bool := FALSE;
+   END_STRUCT;
+END_TYPE
+
+TYPE "typeCylinderSts"
+VERSION : 0.1
+   STRUCT
+      xReady : Bool;
+      xBusy : Bool;
+      xDone : Bool;
+      xExtended : Bool;
+      xRetracted : Bool;
+      xError : Bool;
+      xWarning : Bool;
+      xHmiManualActive : Bool;
+      iState : Int;
+      iErrorId : Int;
+      iWarningId : Int;
+   END_STRUCT;
+END_TYPE
+
+TYPE "typeCylinderAlm"
+VERSION : 0.1
+   STRUCT
+      xExtendTimeout : Bool;
+      xRetractTimeout : Bool;
+      xFeedbackConflict : Bool;
+      xNoFeedback : Bool;
+      xInterlockLost : Bool;
+      xCommandConflict : Bool;
+      iFirstFaultId : Int;
+   END_STRUCT;
+END_TYPE
+
+TYPE "typeCylinderIf"
+VERSION : 0.1
+   STRUCT
+      Cmd : "typeCylinderCmd";
+      Par : "typeCylinderPar";
+      Sts : "typeCylinderSts";
+      Alm : "typeCylinderAlm";
+   END_STRUCT;
+END_TYPE
