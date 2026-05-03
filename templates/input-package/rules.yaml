@@ -1,0 +1,69 @@
+schema_version: "0.1"
+
+naming:
+  object_case: "PascalCase"
+  variable_case: "camelCase"
+  allowed_identifier_pattern: "^[A-Za-z][A-Za-z0-9_]*$"
+  forbidden_hmi_characters:
+    - "%"
+    - "@"
+    - "?"
+    - "\""
+    - "/"
+    - "\\"
+    - "<"
+    - ">"
+    - "."
+    - ":"
+  object_prefixes:
+    unit: "Unit_"
+    equipment_module: "EM_"
+    control_module: "CM_"
+    global_db: "db"
+    plc_type: "type"
+    constant: "C_"
+  variable_prefixes:
+    bool: "x"
+    integer: "i"
+    real: "r"
+    time: "t"
+    command: "cmd"
+    status: "sts"
+    indication: "ind"
+    error: "err"
+    warning: "wrn"
+    parameter: "par"
+    configuration: "cfg"
+    hmi: "hmi"
+    static: "stat"
+    temporary: "temp"
+
+defaults:
+  optimized_blocks: true
+  symbolic_addressing: true
+  retain_by_default: false
+  state_model: "LogicwrightLightweight"
+  hmi_generation_mode: "template_driven"
+  hmi_manual_commands_require_permission: true
+  hmi_writable_values_require_overwrite_flag: true
+
+forbidden:
+  absolute_addressing_in_logic: true
+  any_pointer_as_standard_interface: true
+  bit_memory_for_module_state: true
+  direct_hmi_write_to_internal_state: true
+  automatic_safety_logic_generation: true
+  automatic_download_to_real_device: true
+
+validation:
+  required_checks:
+    - "unique_ids"
+    - "identifier_format"
+    - "hmi_forbidden_characters"
+    - "equipment_parent_exists"
+    - "module_io_exists"
+    - "alarm_code_unique"
+    - "optimized_block_default"
+    - "symbolic_addressing_only"
+    - "hmi_write_permission"
+    - "required_acceptance_tests_defined"

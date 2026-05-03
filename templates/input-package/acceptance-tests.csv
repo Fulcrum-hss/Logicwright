@@ -1,0 +1,6 @@
+test_id,scope,equipment_id,precondition,steps,expected_result,test_type,required,notes
+TC_STATIC_001,PLC,CYL01,Input package complete,Run Logicwright static validation,No naming or reference errors,static_check,true,Must pass before generation
+TC_COMPILE_001,PLC,CYL01,TIA artifacts imported,Run TIA compile,PLC compiles without errors,compile,true,Must pass after import
+TC_SIM_001,Simulation,CYL01,Air pressure healthy and cylinder at retract position,Trigger extend command,Cylinder extends and reports Extended after feedback,simulation,true,Motion simulation check
+TC_ALM_001,Simulation,CYL01,Extend feedback stays false,Trigger extend command and wait for timeout,ALM_CYL_EXT_TIMEOUT is raised and xError becomes true,simulation,true,Alarm behavior check
+TC_HMI_001,HMI,CYL01,HMI tags generated,Open the cylinder faceplate,Faceplate bindings are correct,manual,true,HMI binding check

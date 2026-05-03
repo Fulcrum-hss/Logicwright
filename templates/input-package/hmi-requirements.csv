@@ -1,0 +1,2 @@
+hmi_id,equipment_id,screen_area,faceplate_template,tag_prefix,commands,parameters,status_fields,alarms_visible,roles_allowed,notes
+HMI_CYL01,CYL01,EM_ClampStation,FP_Cylinder_V0_1,CylClamp,Extend;Retract;Reset,ExtendTimeout;RetractTimeout,Ready;Busy;Position;Error,true,Operator;Maintenance,Cylinder standard faceplate

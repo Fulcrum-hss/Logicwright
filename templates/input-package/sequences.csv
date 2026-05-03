@@ -1,0 +1,6 @@
+sequence_id,parent_equipment_id,step_no,step_name,action,command_target,transition_condition,timeout_ms,on_timeout_alarm,next_step,notes
+SEQ_CLAMP,EM01,10,WaitHome,wait,CYL01,xCylClampRetracted,0,,20,Wait for home position
+SEQ_CLAMP,EM01,20,ExtendClamp,extend,CYL01,xCylClampExtended,3000,ALM_CYL_EXT_TIMEOUT,30,Execute clamp motion
+SEQ_CLAMP,EM01,30,ProcessHold,wait,CYL01,xProcessDone,0,,40,Wait for process completion
+SEQ_CLAMP,EM01,40,RetractClamp,retract,CYL01,xCylClampRetracted,3000,ALM_CYL_RET_TIMEOUT,100,Release clamp
+SEQ_CLAMP,EM01,100,Done,done,CYL01,TRUE,0,,,Sequence complete

@@ -1,0 +1,5 @@
+alarm_id,equipment_id,alarm_code,alarm_class,severity,trigger_expression,reset_condition,zh_CN,en_US,hmi_text_list_id,stop_required,first_fault_latch
+ALM_CYL_EXT_TIMEOUT,CYL01,1001,Alarm,High,statState=Extending AND tExtendTimeoutElapsed,xReset,Clamp cylinder extend timeout,Clamp cylinder extend timeout,CylAlarmTexts,true,true
+ALM_CYL_RET_TIMEOUT,CYL01,1002,Alarm,High,statState=Retracting AND tRetractTimeoutElapsed,xReset,Clamp cylinder retract timeout,Clamp cylinder retract timeout,CylAlarmTexts,true,true
+ALM_CYL_AIR_LOW,CYL01,1003,Alarm,High,NOT xAirPressureOk,xReset,Air pressure low,Air pressure low,CylAlarmTexts,true,true
+ALM_CYL_CMD_CONFLICT,CYL01,1004,Alarm,Medium,cmdExtend AND cmdRetract,xReset,Cylinder command conflict,Cylinder command conflict,CylAlarmTexts,true,true

@@ -1,0 +1,19 @@
+# Local reference documents and vendor PDFs are not committed.
+reference/
+referenceDoc/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Generated run outputs
+runs/
+artifacts/
+dist/
+
+# Node/Python local dependencies
+node_modules/
+.venv/
+__pycache__/

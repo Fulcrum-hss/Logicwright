@@ -1,0 +1,6 @@
+io_id,equipment_id,signal_name,direction,address,data_type,comment,device_tag,terminal,safety_related,hmi_visible,required
+I001,CYL01,xCylClampExtended,Input,%I0.0,BOOL,Clamp cylinder extended feedback,B1,X1:1,false,true,true
+I002,CYL01,xCylClampRetracted,Input,%I0.1,BOOL,Clamp cylinder retracted feedback,B2,X1:2,false,true,true
+I003,CYL01,xAirPressureOk,Input,%I0.2,BOOL,Air pressure healthy,PS1,X1:3,false,true,true
+Q001,CYL01,xCylClampExtendValve,Output,%Q0.0,BOOL,Clamp cylinder extend valve,Y1,X2:1,false,true,true
+Q002,CYL01,xCylClampRetractValve,Output,%Q0.1,BOOL,Clamp cylinder retract valve,Y2,X2:2,false,true,true

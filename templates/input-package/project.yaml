@@ -1,0 +1,46 @@
+schema_version: "0.1"
+project:
+  id: "LW-DEMO-CYL-001"
+  name: "DemoCylinderStation"
+  description: "Single-station cylinder demo project"
+  customer: "ExampleCustomer"
+  site: "ExampleSite"
+  timezone: "Asia/Shanghai"
+
+engineering:
+  tia_portal_version: "V21"
+  target_plc_family: "S7-1500"
+  cpu_order_no: "TBD"
+  cpu_firmware: "TBD"
+  hmi_platform: "WinCC Unified"
+  hmi_device: "MTP1200 Unified Comfort"
+  project_languages:
+    - "en-US"
+    - "zh-CN"
+
+generation_scope:
+  plc: true
+  hmi: true
+  safety: false
+  packml: false
+  tia_openness_import: true
+  compile_after_import: true
+  download_to_real_device: false
+
+libraries:
+  plc_standard_library:
+    name: "LogicwrightStandardPLC"
+    version: "0.1.0"
+  hmi_template_library:
+    name: "LogicwrightUnifiedHMI"
+    version: "0.1.0"
+  siemens_references:
+    programming_guideline: "81318674_Programming_guideline_DOC_v16_en.pdf"
+    standardization_guideline: "109756737_Standardization_Guideline_DOC_V10_en (1).pdf"
+
+deliverables:
+  generate_scl_sources: true
+  generate_udt_sources: true
+  generate_hmi_tag_tables: true
+  generate_alarm_text_lists: true
+  generate_audit_log: true

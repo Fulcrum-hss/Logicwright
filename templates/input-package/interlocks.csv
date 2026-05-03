@@ -1,0 +1,4 @@
+interlock_id,equipment_id,target_command,condition_expression,condition_description,severity,on_false_action,hmi_message_id,notes
+ILK_CYL_EXT_AIR,CYL01,cmdExtend,xAirPressureOk,Air pressure healthy,Alarm,block_command,ALM_CYL_AIR_LOW,Air pressure low blocks extend
+ILK_CYL_RET_AIR,CYL01,cmdRetract,xAirPressureOk,Air pressure healthy,Alarm,block_command,ALM_CYL_AIR_LOW,Air pressure low blocks retract
+ILK_CYL_CMD_CONFLICT,CYL01,cmdExtend OR cmdRetract,NOT(cmdExtend AND cmdRetract),Extend and retract commands cannot be active together,Alarm,stop_module,ALM_CYL_CMD_CONFLICT,Command conflict enters fault

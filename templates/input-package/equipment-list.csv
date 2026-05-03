@@ -1,0 +1,4 @@
+equipment_id,parent_id,level,name,description,module_type,template_id,generate_plc,generate_hmi,notes
+U01,,Unit,Unit_Loading,Loading unit,Unit,Unit_Default,true,true,Sample unit
+EM01,U01,EquipmentModule,EM_ClampStation,Clamping station,ClampStation,EM_Default,true,true,Contains one clamp cylinder
+CYL01,EM01,ControlModule,CM_Cylinder_Clamp,Clamp cylinder,Cylinder,CM_Cylinder_V0_1,true,true,First sample module

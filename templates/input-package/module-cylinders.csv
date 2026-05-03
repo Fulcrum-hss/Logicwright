@@ -1,0 +1,2 @@
+cylinder_id,parent_equipment_id,instance_name,description,valve_type,extend_output,retract_output,extended_input,retracted_input,enable_input,interlock_group,extend_timeout_ms,retract_timeout_ms,home_position,hmi_manual_allowed,template_id
+CYL01,EM01,instCylClamp,Clamp cylinder,double_solenoid,xCylClampExtendValve,xCylClampRetractValve,xCylClampExtended,xCylClampRetracted,xAirPressureOk,ILK_CLAMP,3000,3000,retracted,true,CM_Cylinder_V0_1
