@@ -57,6 +57,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="TiaAssemblyResolver.cs" />
+    <Compile Include="TiaContextExporter.cs" />
+    <Compile Include="TiaPortalSession.cs" />
     <Compile Include="TiaProbe.cs" />
     <Compile Include="TiaRuntime.cs" />
     <Compile Include="WindowsIdentityInfo.cs" />

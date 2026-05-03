@@ -4,16 +4,16 @@ This folder contains a copyable standard input package. Engineers can duplicate 
 
 File summary:
 
-- `project.yaml`: project identity, TIA version, target PLC/HMI, and generation scope.
-- `rules.yaml`: naming, forbidden items, default generation strategy, and validation rules.
-- `equipment-list.csv`: Unit, EM, and CM hierarchy and module list.
-- `io-list.csv`: I/O point list.
-- `module-cylinders.csv`: cylinder module instance table.
-- `sequences.csv`: sequence step table.
-- `interlocks.csv`: interlock condition table.
-- `alarms.csv`: alarm and diagnostic table.
-- `hmi-requirements.csv`: HMI template and variable requirements.
-- `acceptance-tests.csv`: acceptance test cases.
+- `01-project.yaml`: project identity, TIA version, target PLC/HMI, and generation scope.
+- `02-rules.yaml`: naming, forbidden items, default generation strategy, and validation rules.
+- `03-equipment-list.csv`: Unit, EM, and CM hierarchy and module list.
+- `04-io-list.csv`: I/O point list.
+- `05-module-cylinders.csv`: cylinder module instance table.
+- `06-sequences.csv`: sequence step table.
+- `07-interlocks.csv`: interlock condition table.
+- `08-alarms.csv`: alarm and diagnostic table.
+- `09-hmi-requirements.csv`: HMI template and variable requirements.
+- `10-acceptance-tests.csv`: acceptance test cases.
 
 Filling rules are described in:
 

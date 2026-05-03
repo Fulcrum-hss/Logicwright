@@ -16,42 +16,42 @@ This document defines the standard input package that engineers deliver to Logic
 
 ```text
 input-package/
-  project.yaml
-  rules.yaml
-  equipment-list.csv
-  io-list.csv
-  module-cylinders.csv
-  sequences.csv
-  interlocks.csv
-  alarms.csv
-  hmi-requirements.csv
-  acceptance-tests.csv
+  01-project.yaml
+  02-rules.yaml
+  03-equipment-list.csv
+  04-io-list.csv
+  05-module-cylinders.csv
+  06-sequences.csv
+  07-interlocks.csv
+  08-alarms.csv
+  09-hmi-requirements.csv
+  10-acceptance-tests.csv
 ```
 
 Example templates are provided in:
 
-- `templates/input-package/project.yaml`
-- `templates/input-package/rules.yaml`
+- `templates/input-package/01-project.yaml`
+- `templates/input-package/02-rules.yaml`
 - `templates/input-package/*.csv`
 
 ## 3. File Responsibilities
 
 | File | Filled by | Purpose |
 | --- | --- | --- |
-| `project.yaml` | Project lead / PLC lead | Project identity, TIA version, target PLC, HMI, languages, and generation scope. |
-| `rules.yaml` | Standardization lead | Naming rules, library versions, forbidden items, default state model, and validation strategy. |
-| `equipment-list.csv` | Mechanical / electrical / PLC team | Unit, EM, and CM hierarchy and the module list. |
-| `io-list.csv` | Electrical engineer | I/O addresses, symbolic names, comments, ownership, and HMI visibility. |
-| `module-cylinders.csv` | PLC engineer | Cylinder instances, valve type, inputs/outputs, timeouts, home position, and HMI manual permission. |
-| `sequences.csv` | PLC / process engineer | Sequence steps, transitions, and timeout handling. |
-| `interlocks.csv` | PLC engineer / safety owner | Command permission, blocking conditions, failure actions, and prompts. |
-| `alarms.csv` | PLC/HMI engineer | Alarm codes, severity, trigger condition, reset condition, and multilingual text. |
-| `hmi-requirements.csv` | HMI engineer | Screen areas, faceplates, commands, parameters, states, and permissions. |
-| `acceptance-tests.csv` | Commissioning / test lead | Compile, simulation, motion, alarm, and HMI binding checks. |
+| `01-project.yaml` | Project lead / PLC lead | Project identity, TIA version, target PLC, HMI, languages, and generation scope. |
+| `02-rules.yaml` | Standardization lead | Naming rules, library versions, forbidden items, default state model, and validation strategy. |
+| `03-equipment-list.csv` | Mechanical / electrical / PLC team | Unit, EM, and CM hierarchy and the module list. |
+| `04-io-list.csv` | Electrical engineer | I/O addresses, symbolic names, comments, ownership, and HMI visibility. |
+| `05-module-cylinders.csv` | PLC engineer | Cylinder instances, valve type, inputs/outputs, timeouts, home position, and HMI manual permission. |
+| `06-sequences.csv` | PLC / process engineer | Sequence steps, transitions, and timeout handling. |
+| `07-interlocks.csv` | PLC engineer / safety owner | Command permission, blocking conditions, failure actions, and prompts. |
+| `08-alarms.csv` | PLC/HMI engineer | Alarm codes, severity, trigger condition, reset condition, and multilingual text. |
+| `09-hmi-requirements.csv` | HMI engineer | Screen areas, faceplates, commands, parameters, states, and permissions. |
+| `10-acceptance-tests.csv` | Commissioning / test lead | Compile, simulation, motion, alarm, and HMI binding checks. |
 
 ## 4. Field Rules
 
-### 4.1 `project.yaml`
+### 4.1 `01-project.yaml`
 
 Key fields:
 
@@ -66,7 +66,7 @@ Key fields:
 | `generation_scope` | Yes | Whether to generate PLC, HMI, Safety, or PackML assets. |
 | `libraries` | Yes | Standard library, template library, and version information. |
 
-### 4.2 `rules.yaml`
+### 4.2 `02-rules.yaml`
 
 Key fields:
 
@@ -80,7 +80,7 @@ Key fields:
 | `defaults.symbolic_addressing` | Whether symbolic addressing is mandatory. |
 | `validation.required_checks` | Validation checks Logicwright must run. |
 
-### 4.3 `equipment-list.csv`
+### 4.3 `03-equipment-list.csv`
 
 | Field | Required | Meaning |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ Key fields:
 | `generate_plc` | Yes | Whether PLC artifacts are generated. |
 | `generate_hmi` | Yes | Whether HMI interfaces or screens are generated. |
 
-### 4.4 `io-list.csv`
+### 4.4 `04-io-list.csv`
 
 | Field | Required | Meaning |
 | --- | --- | --- |
@@ -108,7 +108,7 @@ Key fields:
 | `hmi_visible` | Yes | Whether the signal needs to appear on HMI. |
 | `required` | Yes | Whether the signal is required by the module. |
 
-### 4.5 `module-cylinders.csv`
+### 4.5 `05-module-cylinders.csv`
 
 | Field | Required | Meaning |
 | --- | --- | --- |
@@ -126,7 +126,7 @@ Key fields:
 | `home_position` | Yes | `retracted` or `extended`. |
 | `hmi_manual_allowed` | Yes | Whether HMI manual motion is allowed. |
 
-### 4.6 `sequences.csv`
+### 4.6 `06-sequences.csv`
 
 | Field | Meaning |
 | --- | --- |
@@ -141,7 +141,7 @@ Key fields:
 | `on_timeout_alarm` | Timeout alarm ID. |
 | `next_step` | Next step number. |
 
-### 4.7 `interlocks.csv`
+### 4.7 `07-interlocks.csv`
 
 | Field | Meaning |
 | --- | --- |
@@ -153,7 +153,7 @@ Key fields:
 | `on_false_action` | Action when condition fails, such as `block_command` or `stop_module`. |
 | `hmi_message_id` | HMI prompt or alarm ID. |
 
-### 4.8 `alarms.csv`
+### 4.8 `08-alarms.csv`
 
 | Field | Meaning |
 | --- | --- |
@@ -168,7 +168,7 @@ Key fields:
 | `stop_required` | Whether the module must stop or fault. |
 | `first_fault_latch` | Whether the alarm contributes to first-fault latch. |
 
-### 4.9 `hmi-requirements.csv`
+### 4.9 `09-hmi-requirements.csv`
 
 | Field | Meaning |
 | --- | --- |
@@ -183,7 +183,7 @@ Key fields:
 | `alarms_visible` | Whether alarms are visible. |
 | `roles_allowed` | Allowed roles, separated by semicolons. |
 
-### 4.10 `acceptance-tests.csv`
+### 4.10 `10-acceptance-tests.csv`
 
 | Field | Meaning |
 | --- | --- |
@@ -203,14 +203,14 @@ Key fields:
 | Microsoft Excel | Main editing tool for engineers | Good for I/O lists, equipment lists, alarms, and HMI tables. |
 | Google Sheets | Online multi-user collaboration | Good for early cross-functional review and shared editing. |
 | LibreOffice Calc | Free offline editing | Suitable for teams that do not use commercial office suites. |
-| Visual Studio Code + Red Hat YAML | Editing `project.yaml` and `rules.yaml` | Good for validation, completion, and schema-based editing. |
+| Visual Studio Code + Red Hat YAML | Editing `01-project.yaml` and `02-rules.yaml` | Good for validation, completion, and schema-based editing. |
 | TIA Portal / STEP 7 / WinCC Unified | Final import, compile, and validation | Siemens engineering environment. |
 | Git / GitHub | Version control and review | Input packages should be versioned together with the project. |
 
 Recommended workflow:
 
 1. PLC/HMI engineers fill the CSV tables in Excel or Google Sheets.
-2. The standardization lead edits `project.yaml` and `rules.yaml` in VS Code.
+2. The standardization lead edits `01-project.yaml` and `02-rules.yaml` in VS Code.
 3. Export CSV files as UTF-8 before each submission.
 4. Pass the package through Logicwright validation.
 5. Validate the result in TIA Portal compilation and HMI binding checks.
@@ -221,8 +221,8 @@ Recommended workflow:
 Before submitting the package, engineers must confirm:
 
 - `equipment_id`, `io_id`, `alarm_id`, and `test_id` are globally unique.
-- Every `equipment_id` exists in `equipment-list.csv`.
-- Every module-referenced I/O signal exists in `io-list.csv`.
+- Every `equipment_id` exists in `03-equipment-list.csv`.
+- Every module-referenced I/O signal exists in `04-io-list.csv`.
 - `alarm_code` is unique within the project.
 - HMI writable fields are marked with permissions and interlocks.
 - Signals marked `safety_related=true` are not used for automatic Safety logic generation.

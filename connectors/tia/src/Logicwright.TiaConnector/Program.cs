@@ -26,8 +26,12 @@ namespace Logicwright.TiaConnector
                         return 0;
 
                     case "probe":
-                        var options = ProbeOptions.Parse(args.Skip(1).ToArray());
-                        return new TiaProbe().Run(options);
+                        var probeOptions = TiaSessionOptions.Parse(args.Skip(1).ToArray(), requireOutput: false);
+                        return new TiaProbe().Run(probeOptions);
+
+                    case "context":
+                        var contextOptions = TiaSessionOptions.Parse(args.Skip(1).ToArray(), requireOutput: true);
+                        return new TiaContextExporter().Run(contextOptions);
 
                     default:
                         Console.Error.WriteLine("Unknown command: " + args[0]);
@@ -58,10 +62,12 @@ namespace Logicwright.TiaConnector
             Console.WriteLine("  Logicwright.TiaConnector.exe probe --attach");
             Console.WriteLine("  Logicwright.TiaConnector.exe probe --start");
             Console.WriteLine("  Logicwright.TiaConnector.exe probe --start --without-ui");
+            Console.WriteLine("  Logicwright.TiaConnector.exe context --attach --output artifacts/context/project-context.json");
             Console.WriteLine();
             Console.WriteLine("Notes:");
             Console.WriteLine("  --attach connects to the first running TIA Portal process.");
             Console.WriteLine("  --start starts a new TIA Portal process through Openness.");
+            Console.WriteLine("  context exports basic project/device context as JSON.");
         }
     }
 }
